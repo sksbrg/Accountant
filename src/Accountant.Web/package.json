@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/sksbrg/Accountant/issues"
   },
-  "homepage": "https://github.com/sksbrg/Accountant#readme"
+  "homepage": "https://github.com/sksbrg/Accountant#readme",
+  "devDependencies": {
+    "webpack": "^2.1.0-beta.27",
+    "webpack-dev-server": "^2.1.0-beta.12"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
 }
