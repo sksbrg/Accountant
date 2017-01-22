@@ -7,6 +7,19 @@ module.exports = {
         path: './wwwroot',
         filename: 'scripts/bundle.js'
     },
+    module: {
+        rules: [{
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            use: [{
+                loader: 'babel-loader',
+                options: {
+                    cacheDirectory: true,
+                    presets: ['es2015']
+                }
+            }]
+        }]
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html'
