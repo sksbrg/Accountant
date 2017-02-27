@@ -16,9 +16,8 @@ module.exports = {
         // using the files in the 'src' folder
         // the app knows which of the files is our entry point because of the 'aurelia-bootstrapper-webpack'
         // who reads the entry point from the aurelia-app="main" in our index.html
-        // app: [],
-        // TODO: does not work as intended; needed to reference 'main.js' manually
-        app: ['./src/main.js'],
+        app: ['./src/main' /* this is filled by the aurelia-webpack-plugin but is not allowed to be empty */],
+        
         // all Aurelia libraries will be saved into a dedicated bundle
         // to ease maintenance we read the required packages from the 'dependencies' section of our 'package.json' file
         aurelia: Object.keys(project.dependencies).filter(dep => dep.startsWith('aurelia-'))
