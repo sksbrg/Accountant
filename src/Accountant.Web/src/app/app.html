@@ -1,4 +1,10 @@
 ﻿<template>
     <h1>Hello ${name}, Accountant at your service!</h1>
     <input type="text" value.bind="name">
+
+    <ul>
+        <li repeat.for="value of values">
+            ${value}
+        </li>
+    </ul>
 </template>
