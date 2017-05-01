@@ -4,11 +4,11 @@ import { Service } from './service';
 @inject(Service)
 export class App {
     constructor(service) {
-        this.values = [];
+        this.transactions = [];
         this.service = service;
         this.name = 'there';
 
-        this.service.getValues()
-            .then(data => this.values = data);
+        this.service.getTransactions()
+            .then(data => this.transactions = data);
     }
 }

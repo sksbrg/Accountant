@@ -24,16 +24,16 @@ export class Service {
         });
     }
 
-    getValues() {
-        return this.client.fetch('values')
+    getTransactions() {
+        return this.client.fetch('transactions')
             .then(response => response.json())
             .then(data => {
                 return data;
             });
     }
 
-    getValue(id) {
-        return this.client.fetch(`values/${id}`)
+    getTransaction(id) {
+        return this.client.fetch(`transactions/${id}`)
             .then(response => response.json())
             .then(data => {
                 return data;

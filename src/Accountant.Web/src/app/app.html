@@ -3,8 +3,8 @@
     <input type="text" value.bind="name">
 
     <ul>
-        <li repeat.for="value of values">
-            ${value}
+        <li repeat.for="transaction of transactions">
+            ${transaction.id} ${transaction.amount}
         </li>
     </ul>
 </template>
