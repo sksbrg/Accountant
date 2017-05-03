@@ -26,9 +26,14 @@ namespace Accountant.Web.Models
             {
                 File.Create(_filePath).Dispose();
             }
-            
-            JsonSerializer serializer = new JsonSerializer();
-            _transactions = JsonConvert.DeserializeObject<IList<Transaction>>(File.ReadAllText(_filePath));
+
+            var rawData = File.ReadAllText(_filePath);
+
+            if (!string.IsNullOrWhiteSpace(rawData))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                _transactions = JsonConvert.DeserializeObject<IList<Transaction>>(rawData);
+            }
         }
 
         public Transaction GetById(int id)
