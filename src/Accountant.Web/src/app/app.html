@@ -1,10 +1,24 @@
 ﻿<template>
-    <h1>Hello ${name}, Accountant at your service!</h1>
-    <input type="text" value.bind="name">
+    <form with.bind="transaction">
+	    <input type="number" step="any" min="0" value.bind="amount" required />
+        <input type="text" value.bind="tags" required />
+        <input type="date" value.bind="date" required />
+		
+        <select value.bind="accountId">
+            <option model.bind="null">Choose...</option>
+            <option repeat.for="account of accounts" model.bind="account.id">
+                ${account.label}
+            </option>
+        </select>
+
+		<input type="text" value.bind="notes" />
+		<button click.trigger="addExpense()">Expense</button>
+		<button click.trigger="addIncome()">Income</button>
+	</form>
 
     <ul>
         <li repeat.for="transaction of transactions">
-            ${transaction.id} ${transaction.amount}
+            ${transaction.id} ${transaction.amount} ${transaction.tags} ${transaction.date} ${transaction.notes} ${accounts[transaction.accountId].label} ${transactionTypes[transaction.type].label}
         </li>
     </ul>
 </template>

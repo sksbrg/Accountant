@@ -1,4 +1,4 @@
-﻿import { HttpClient } from 'aurelia-fetch-client';
+﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 
 @inject(HttpClient)
@@ -12,11 +12,13 @@ export class Service {
                 .withInterceptor({
                     request(request) {
                         console.log(`Requesting ${request.method} ${request.url}`);
+                        console.log(request);
 
                         return request;
                     },
                     response(response) {
                         console.log(`Received ${response.status} ${response.url}`);
+                        console.log(response);
 
                         return response;
                     }
@@ -37,6 +39,19 @@ export class Service {
             .then(response => response.json())
             .then(data => {
                 return data;
+            });
+    }
+
+    createTransaction(transaction) {
+        return this.client.fetch('transactions', {
+                method: 'post',
+                body: json(transaction)
+            })
+            .then(response => {
+                let url = response.headers.get('location');
+                let id = url.split('/').pop();
+                
+                return id;
             });
     }
 }
