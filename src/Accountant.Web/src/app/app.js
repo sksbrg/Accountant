@@ -1,4 +1,5 @@
 ﻿import { inject } from 'aurelia-framework';
+import _ from 'lodash';
 import { Service } from './service';
 
 @inject(Service)
@@ -12,7 +13,10 @@ export class App {
         this.transaction = new Transaction();
 
         this.service.getTransactions()
-            .then(data => this.transactions = data);
+            .then(data => {
+                let ordered = _.orderBy(data, 'date', 'desc');
+                this.transactions = ordered;
+            });
     }
 
     addExpense() {

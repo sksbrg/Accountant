@@ -36,7 +36,7 @@ module.exports = {
                 options: {
                     cacheDirectory: true,
                     presets: ['es2015'],
-                    plugins: ['transform-decorators-legacy']
+                    plugins: ['transform-decorators-legacy', 'lodash']
                 }
             }]
         },
