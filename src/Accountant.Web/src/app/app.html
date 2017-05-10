@@ -16,9 +16,15 @@
 		<button click.trigger="addIncome()">Income</button>
 	</form>
 
-    <ul>
-        <li repeat.for="transaction of transactions">
-            ${transaction.id} ${transaction.amount} ${transaction.tags} ${transaction.date} ${transaction.notes} ${accounts[transaction.accountId].label} ${transactionTypes[transaction.type].label}
-        </li>
-    </ul>
+    <table>
+        <tr repeat.for="transaction of transactions">
+            <td>${transaction.id}</td>
+            <td>${transaction.amount}</td>
+            <td>${transaction.tags}</td>
+            <td>${getHumanReadableDate(transaction.date)}</td>
+            <td>${transaction.notes}</td>
+            <td>${getAccountLabel(transaction.accountId)}</td>
+            <td>${getTransactionTypeLabel(transaction.type)}</td>
+        </tr>
+    </table>
 </template>

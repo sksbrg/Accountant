@@ -41,6 +41,18 @@ export class App {
             });
     }
 
+    getHumanReadableDate(timestamp) {
+        return new Date(timestamp).toISOString().slice(0, 10);
+    }
+
+    getAccountLabel(accountId) {
+        return this.accounts[accountId].label;
+    }
+
+    getTransactionTypeLabel(transactionTypeId) {
+        return this.transactionTypes[transactionTypeId].label;
+    }
+
     createTransactionDto(transaction) {
         let amount = parseFloat(transaction.amount);
         let date = Date.parse(transaction.date);
