@@ -1,10 +1,11 @@
-﻿export function configure(aurelia) {
+﻿import {Aurelia} from 'aurelia-framework'
+
+export function configure(aurelia: Aurelia) {
     aurelia.use
         .basicConfiguration()
         .developmentLogging();
 
     aurelia.start().then(a => { 
-        //this loads our app.js in the body element.
         a.setRoot('app/app', document.body);
     });
 }

@@ -24,12 +24,17 @@ module.exports = {
     },
 
     resolve: {
-        extensions: ['.js'],
+        extensions: ['.ts', '.js'],
         modules: ['src', 'node_modules'],
     },
 
     module: {
-        rules: [{
+        rules: [
+        {
+            test: /\.ts$/,
+            loader: ['ts-loader']
+        },
+        {
             test: /\.js$/,
             use: [{
                 loader: 'babel-loader',
