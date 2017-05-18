@@ -14,7 +14,6 @@ export class App {
         this._service.getTransactions()
             .then(data => {
                 let ordered = _.orderBy(data, 'date', 'desc');
-                //this.transactions = ordered;
                 this.transactions = data;
             });
     }
@@ -52,7 +51,6 @@ export class App {
     }
 
     private createTransactionDto(transaction: TransactionViewModel) {
-        //let amount = parseFloat(transaction.amount);
         let date = Date.parse(transaction.date);
         let tags = transaction.tags.split(',');
 
@@ -101,15 +99,3 @@ export class TransactionViewModel {
         this.date = new Date().toISOString().slice(0, 10);
     }
 }
-
-/*export class Transaction {
-    constructor(public id? : number, public amount?: number, public tags?: string, public date?: string,
-                public notes?: string, public accountId?: number, public transactionTypeId?: number) {
-        this.date = new Date().toISOString().slice(0, 10);
-        /*this.tags = null;
-        this.date = new Date().toISOString().slice(0, 10);
-        this.notes = null;
-        this.accountId = null;
-        this.transactionTypeId = null;
-    }
-}*/
