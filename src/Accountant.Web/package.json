@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/sksbrg/Accountant#readme",
   "devDependencies": {
+    "@types/lodash": "^4.14.64",
     "aurelia-webpack-plugin": "^2.0.0-rc.2",
     "babel-core": "^6.23.1",
     "babel-loader": "^6.4.1",

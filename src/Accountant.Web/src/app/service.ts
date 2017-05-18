@@ -2,11 +2,9 @@
 import { inject } from 'aurelia-framework';
 
 @inject(HttpClient)
-export class Service {
-    constructor(client) {
-        this.client = client;
-
-        this.client.configure(config => {
+export class TransactionService {
+    constructor(private _client: HttpClient) {
+        this._client.configure(config => {
             config
                 .withBaseUrl('api/')
                 .withInterceptor({
@@ -27,31 +25,36 @@ export class Service {
     }
 
     getTransactions() {
-        return this.client.fetch('transactions')
+        return this._client.fetch('transactions')
             .then(response => response.json())
             .then(data => {
                 return data;
             });
     }
 
-    getTransaction(id) {
-        return this.client.fetch(`transactions/${id}`)
+    getTransaction(id: number) {
+        return this._client.fetch(`transactions/${id}`)
             .then(response => response.json())
             .then(data => {
                 return data;
             });
     }
 
-    createTransaction(transaction) {
-        return this.client.fetch('transactions', {
+    createTransaction(transaction: any): Promise<number> {
+        return this._client.fetch('transactions', {
                 method: 'post',
                 body: json(transaction)
             })
             .then(response => {
                 let url = response.headers.get('location');
+
+                if (!url) throw new Error(`Missing 'location' header: expected the response to contain a HTTP 'location' header pointing to the newly created transaction.`);
+
                 let id = url.split('/').pop();
                 
-                return id;
+                if (!id) throw new Error(`Missing 'id': expected the HTTP 'location' header of the response to contain the id of the newly created transaction.`);
+
+                return parseInt(id);
             });
     }
 }
