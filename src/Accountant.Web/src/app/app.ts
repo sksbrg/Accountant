@@ -13,8 +13,8 @@ export class App {
     constructor(private _service: TransactionService) {
         this._service.getTransactions()
             .then(data => {
-                let ordered = _.orderBy(data, 'date', 'desc');
-                this.transactions = data;
+                let ordered = _.orderBy<TransactionViewModel>(data, 'date', 'desc');
+                this.transactions = ordered;
             });
     }
 
