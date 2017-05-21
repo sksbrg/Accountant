@@ -74,7 +74,7 @@ namespace Accountant.Web.Models
             originalTransaction.Amount = updatedTransaction.Amount;
             originalTransaction.Date = updatedTransaction.Date;
             originalTransaction.Notes = updatedTransaction.Notes;
-            originalTransaction.Type = updatedTransaction.Type;
+            originalTransaction.TypeId = updatedTransaction.TypeId;
             originalTransaction.Tags = updatedTransaction.Tags;
 
             SaveData();

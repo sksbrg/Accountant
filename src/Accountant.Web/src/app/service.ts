@@ -1,6 +1,7 @@
 ﻿import { HttpClient, json } from 'aurelia-fetch-client';
 import { inject } from 'aurelia-framework';
 
+
 @inject(HttpClient)
 export class TransactionService {
     constructor(private _client: HttpClient) {
@@ -24,7 +25,7 @@ export class TransactionService {
         });
     }
 
-    getTransactions() {
+    getTransactions(): Promise<Array<TransactionDto>> {
         return this._client.fetch('transactions')
             .then(response => response.json())
             .then(data => {
@@ -32,7 +33,7 @@ export class TransactionService {
             });
     }
 
-    getTransaction(id: number) {
+    getTransaction(id: number): Promise<TransactionDto> {
         return this._client.fetch(`transactions/${id}`)
             .then(response => response.json())
             .then(data => {
@@ -40,7 +41,7 @@ export class TransactionService {
             });
     }
 
-    createTransaction(transaction: any): Promise<number> {
+    createTransaction(transaction: TransactionDto): Promise<number> {
         return this._client.fetch('transactions', {
                 method: 'post',
                 body: json(transaction)
@@ -56,5 +57,14 @@ export class TransactionService {
 
                 return parseInt(id);
             });
+    }
+}
+
+export class TransactionDto {
+    public id: number;
+
+    constructor(public amount: number, public date: number, public accountId: number, public typeId: number,
+                public notes: string, public tags: Array<string>) {
+
     }
 }

@@ -9,7 +9,7 @@ namespace Accountant.Web.Models
         public long Date { get; set; }
         public string Notes { get; set; }
         public int AccountId { get; set; }
-        public TransactionType Type { get; set; }
+        public int TypeId { get; set; }
         public IList<string> Tags { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿import { inject } from 'aurelia-framework';
 import * as _ from 'lodash';
-import { TransactionService } from './service';
+
+import { TransactionService, TransactionDto } from './service';
+
 
 @inject(TransactionService)
 export class App {
@@ -13,27 +15,36 @@ export class App {
     constructor(private _service: TransactionService) {
         this._service.getTransactions()
             .then(data => {
-                let ordered = _.orderBy<TransactionViewModel>(data, 'date', 'desc');
-                this.transactions = ordered;
+                let transactions = new Array<TransactionViewModel>();
+
+                data.forEach(dto => {
+                    let t = this.createTransactionViewModel(dto);
+
+                    transactions.push(t);
+                });
+
+                this.transactions = this.orderTransactionsByDate(transactions);
             });
     }
 
     addExpense() {
-        this.transaction.transactionTypeId = 0;
+        this.transaction.typeId = 0;
 
         this.saveTransaction(this.transaction)
             .then(saved => {
                 this.transactions.push(saved);
+                this.transactions = this.orderTransactionsByDate(this.transactions);
                 this.transaction = new TransactionViewModel();
             });
     }
 
     addIncome() {
-        this.transaction.transactionTypeId = 1;
+        this.transaction.typeId = 1;
 
         this.saveTransaction(this.transaction)
             .then(saved => {
                 this.transactions.push(saved);
+                this.transactions = this.orderTransactionsByDate(this.transactions);
                 this.transaction = new TransactionViewModel();
             });
     }
@@ -50,20 +61,28 @@ export class App {
         return this._transactionTypes[transactionTypeId].label;
     }
 
-    private createTransactionDto(transaction: TransactionViewModel) {
+    private createTransactionDto(transaction: TransactionViewModel): TransactionDto {
         let date = Date.parse(transaction.date);
         let tags = transaction.tags.split(',');
 
-        let transactionDto = {
-            Amount: transaction.amount,
-            Date: date,
-            AccountId: transaction.accountId,
-            Notes: transaction.notes,
-            Type: transaction.transactionTypeId,
-            Tags: tags
-        };
+        let dto = new TransactionDto(transaction.amount, date, transaction.accountId,
+                        transaction.typeId, transaction.notes, tags);
 
-        return transactionDto;
+        return dto;
+    }
+
+    private createTransactionViewModel(transactionDto: TransactionDto): TransactionViewModel {
+        let t = new TransactionViewModel();
+
+        t.id = transactionDto.id;
+        t.accountId = transactionDto.accountId;
+        t.amount = transactionDto.amount;
+        t.date = this.getHumanReadableDate(transactionDto.date);
+        t.notes = transactionDto.notes;
+        t.tags = transactionDto.tags.join(',');
+        t.typeId = transactionDto.typeId;
+
+        return t;
     }
 
     private saveTransaction(transaction: TransactionViewModel) {
@@ -75,7 +94,7 @@ export class App {
         saved.date = transaction.date;
         saved.notes = transaction.notes;
         saved.tags = transaction.tags;
-        saved.transactionTypeId = transaction.transactionTypeId;
+        saved.typeId = transaction.typeId;
 
         return this._service.createTransaction(dto)
             .then(id => { 
@@ -83,6 +102,12 @@ export class App {
                 
                 return saved;
             });
+    }
+
+    private orderTransactionsByDate(transactions: Array<TransactionViewModel>) {
+        let ordered = _.orderBy(transactions, 'date', 'desc');
+
+        return ordered;
     }
 }
 
@@ -93,7 +118,7 @@ export class TransactionViewModel {
     date: string;
     notes: string;
     accountId: number;
-    transactionTypeId: number;
+    typeId: number;
 
     constructor() {
         this.date = new Date().toISOString().slice(0, 10);
