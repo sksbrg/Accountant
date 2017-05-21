@@ -1,7 +1,7 @@
 ﻿import { inject } from 'aurelia-framework';
 import * as _ from 'lodash';
 
-import { TransactionService, TransactionDto } from './service';
+import { TransactionService, TransactionDto } from './transactionService';
 
 
 @inject(TransactionService)
@@ -19,7 +19,6 @@ export class App {
 
                 data.forEach(dto => {
                     let t = this.createTransactionViewModel(dto);
-
                     transactions.push(t);
                 });
 
@@ -47,6 +46,16 @@ export class App {
                 this.transactions = this.orderTransactionsByDate(this.transactions);
                 this.transaction = new TransactionViewModel();
             });
+    }
+
+    deleteTransaction(transaction: TransactionViewModel) {
+        if (confirm(`Delete transaction from ${transaction.date} with amount '${transaction.amount}'?`)) {
+            this._service.deleteTransaction(transaction.id)
+                .then(() => {
+                    let index = this.transactions.indexOf(transaction);
+                    this.transactions.splice(index , 1);
+                });
+        }
     }
 
     getHumanReadableDate(timestamp: number) {

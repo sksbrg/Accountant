@@ -24,6 +24,7 @@
             <td>${transaction.notes}</td>
             <td>${getAccountLabel(transaction.accountId)}</td>
             <td>${getTransactionTypeLabel(transaction.typeId)}</td>
+            <td><button click.delegate="deleteTransaction(transaction)">Delete</button></td>
         </tr>
     </table>
 </template>

@@ -58,6 +58,15 @@ export class TransactionService {
                 return parseInt(id);
             });
     }
+
+    deleteTransaction(id: number) {
+        return this._client.fetch(`transactions/${id}`, {
+            method: 'delete'
+        })
+        .then(response => {
+            return response.ok;
+        });
+    }
 }
 
 export class TransactionDto {
