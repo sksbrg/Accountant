@@ -13,6 +13,10 @@ export class App {
     transactions = new Array<TransactionViewModel>();
     
     constructor(private _service: TransactionService) {
+        
+    }
+
+    activate() {
         this._service.getTransactions()
             .then(data => {
                 let transactions = new Array<TransactionViewModel>();
