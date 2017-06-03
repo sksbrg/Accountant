@@ -59,7 +59,7 @@ export class TransactionService {
             });
     }
 
-    deleteTransaction(id: number) {
+    deleteTransaction(id: number): Promise<boolean> {
         return this._client.fetch(`transactions/${id}`, {
             method: 'delete'
         })
