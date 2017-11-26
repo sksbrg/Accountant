@@ -9,6 +9,7 @@ export class App {
     private _transactionTypes = [{ id: 0, label: "Expense" }, { id: 1, label: "Income" }];
 
     accounts = [{ id: 0, label: "Cash" }, { id: 1, label: "Bank" }];
+    balance = 0;
     transaction = new TransactionViewModel();
     transactions = new Array<TransactionViewModel>();
     
@@ -27,6 +28,7 @@ export class App {
                 });
 
                 this.transactions = this.orderTransactionsByDate(transactions);
+                this.balance = this.calculateBalance(this.transactions);
             });
     }
 
@@ -37,6 +39,7 @@ export class App {
             .then(saved => {
                 this.transactions.push(saved);
                 this.transactions = this.orderTransactionsByDate(this.transactions);
+                this.balance = this.calculateBalance(this.transactions);
                 this.transaction = new TransactionViewModel();
             });
     }
@@ -48,6 +51,7 @@ export class App {
             .then(saved => {
                 this.transactions.push(saved);
                 this.transactions = this.orderTransactionsByDate(this.transactions);
+                this.balance = this.calculateBalance(this.transactions);
                 this.transaction = new TransactionViewModel();
             });
     }
@@ -121,6 +125,21 @@ export class App {
         let ordered = _.orderBy(transactions, 'date', 'desc');
 
         return ordered;
+    }
+
+    private calculateBalance(transactions: Array<TransactionViewModel>) :number {
+        let balance = 0;
+        
+        transactions.forEach(t => {
+            if (t.typeId === 0) {
+                balance -= t.amount;
+            }
+            else {
+                balance += t.amount;
+            }
+        });
+        
+        return balance;
     }
 }
 
