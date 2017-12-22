@@ -15,7 +15,8 @@ namespace Accountant.Web
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json");
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.dev.json", true);
 
             Configuration = builder.Build();
         }
