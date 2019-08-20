@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Accountant.Web
 {
@@ -11,14 +8,17 @@ namespace Accountant.Web
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
+            var webHost = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseKestrel()
                 .UseIISIntegration()
+                .ConfigureLogging((hostingContext, logging) => {
+                    logging.AddConsole();
+                })
                 .UseStartup<Startup>()
                 .Build();
 
-            host.Run();
+            webHost.Run();
         }
     }
 }
