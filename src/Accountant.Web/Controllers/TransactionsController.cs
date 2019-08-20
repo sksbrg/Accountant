@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Accountant.Web.Models;
 
-namespace Accountant.Controllers.Controllers
+namespace Accountant.Web.Controllers
 {
     [Route("api/[controller]")]
     public class TransactionsController : ControllerBase
@@ -21,34 +21,30 @@ namespace Accountant.Controllers.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetByIdRoute")]
-        public IActionResult Get(int id)
+        public ActionResult<Transaction> Get(int id)
         {
             var transaction = _repository.GetById(id);
 
             if (transaction == null)
             {
-                return NotFound();
+                return NotFound(id);
             }
 
-            return new ObjectResult(transaction);
+            return transaction;
         }
 
         [HttpPost]
-        public void Post([FromBody]Transaction transaction)
+        public ActionResult<Transaction> Post([FromBody]Transaction transaction)
         {
             if (!ModelState.IsValid)
             {
-                HttpContext.Response.StatusCode = 400;
+                return BadRequest(ModelState);
             }
             else
             {
                 _repository.Add(transaction);
 
-                string url = Url.RouteUrl("GetByIdRoute", new { id = transaction.Id },
-                    Request.Scheme, Request.Host.ToUriComponent());
-
-                HttpContext.Response.StatusCode = 201;
-                HttpContext.Response.Headers["Location"] = url;
+                return CreatedAtAction(nameof(Get), new { id = transaction.Id }, transaction);
             }
         }
 
@@ -57,17 +53,18 @@ namespace Accountant.Controllers.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
             else
             {
                 if (_repository.TryUpdate(id, updatedTransaction))
                 {
+                    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
                     return NoContent();
                 }
                 else
                 {
-                    return NotFound();
+                    return NotFound(id);
                 }
             }
         }
@@ -77,11 +74,12 @@ namespace Accountant.Controllers.Controllers
         {
             if (_repository.TryDelete(id))
             {
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204
                 return NoContent();
             }
             else
             {
-                return NotFound();
+                return NotFound(id);
             }
         }
     }
