@@ -1,4 +1,5 @@
 ﻿import { inject } from 'aurelia-framework';
+import { observable } from 'aurelia-framework';
 import * as _ from 'lodash';
 
 import { TransactionService, TransactionDto } from './transactionService';
@@ -12,6 +13,9 @@ export class App {
     balance = 0;
     transaction = new TransactionViewModel();
     transactions = new Array<TransactionViewModel>();
+    unfiltedTransactions = new Array<TransactionViewModel>();
+
+    @observable filter = '';
     
     constructor(private _service: TransactionService) {
         
@@ -28,6 +32,7 @@ export class App {
                 });
 
                 this.transactions = this.orderTransactionsByDate(transactions);
+                this.unfiltedTransactions = this.transactions;
                 this.balance = this.calculateBalance(this.transactions);
             });
     }
@@ -140,6 +145,25 @@ export class App {
         });
         
         return balance;
+    }
+
+    private filterChanged(newValue: string, oldValue: string) {
+        let matches = new Array<TransactionViewModel>();
+
+        if (newValue !== '' && newValue.length > 2) {
+            this.transactions.forEach(t => {
+                if (t.tags.toLowerCase().includes(newValue.toLowerCase())) {
+                    matches.push(t);
+                }
+            });
+
+            this.transactions = matches;
+        }
+        else {
+            this.transactions = this.unfiltedTransactions;
+        }
+
+        this.balance = this.calculateBalance(this.transactions);
     }
 }
 

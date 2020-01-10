@@ -18,6 +18,10 @@
         <span>${balance}</span>
 	</form>
 
+    <form>
+        filter by tag: <input type="text" value.bind="filter" />
+    </form>
+
     <table>
         <tr repeat.for="transaction of transactions">
             <td>${getHumanReadableDate(transaction.date)}</td>
